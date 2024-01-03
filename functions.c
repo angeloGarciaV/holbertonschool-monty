@@ -22,5 +22,9 @@ void push(stack_t **stack, unsigned int line_number)
 		free(new);
 		exit(EXIT_FAILURE);
 	}
-
+	new = malloc(sizeof(stack_t));
+	new->n = line_number;
+	new->next = *stack;
+	new->prev = NULL;
+	*stack = new;
 }
