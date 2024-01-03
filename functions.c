@@ -19,6 +19,7 @@ void push(stack_t **stack, unsigned int line_number)
 	if (!new)
 	{
 		dprintf(STDERR_FILENO, "Error: memory allocation failed\n");
+		free(new);
 		exit(EXIT_FAILURE);
 	}
 
