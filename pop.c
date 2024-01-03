@@ -23,4 +23,7 @@ void pop(stack_t **stack, unsigned int line_number)
 
     free(temp);
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 309d437a36459312f47b62a67e36f991e4f4f378
