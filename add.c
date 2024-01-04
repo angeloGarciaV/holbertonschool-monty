@@ -1,4 +1,11 @@
 #include "monty.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
 
 /**
  * add - The opcode add adds the top two elements of the stack.
@@ -7,13 +14,17 @@
  */
 void add(stack_t **stack, unsigned int line_number)
 {
-    if (!stack || !(*stack) || !(*stack)->next)
-    {
-        fprintf(stderr, "L%u: can't add, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+	stack_t *tmp;
+	int sum;
 
-    (*stack)->next->n += (*stack)->n;  /* Add the top two elements */
-    pop(stack, line_number);           /* Remove the top element */
+	if (!stack || !(*stack) || !(*stack)->next)
+	{
+		fprintf(stderr, "L%u: can't add, stack too short\n", line_number);
+		exit(EXIT_FAILURE);
+	}
+	tmp = *stack;
+	sum = tmp->n + tmp->next->n;
+	tmp->next->n = sum;
+	*stack = tmp->next;
+	free(tmp);
 }
-
