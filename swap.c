@@ -19,7 +19,3 @@ void swap(stack_t **stack, unsigned int line_number)
     (*stack)->n = (*stack)->next->n;
     (*stack)->next->n = temp;
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> ca80ad2e4e0668984f867106114625cb8349ab06
