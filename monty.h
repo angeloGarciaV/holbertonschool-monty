@@ -51,5 +51,5 @@ void add(stack_t **stack, unsigned int line_number);
 void (*get_func(void))(stack_t **, unsigned int);
 void handle(char *file);
 void free_stack(stack_t *head);
-
+int _atoi(char *str, unsigned int line_number);
 #endif
