@@ -1,12 +1,4 @@
 #include "monty.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <string.h>
-#include <errno.h>
 
 /**
  * pint - The opcode pint prints the value at the top of the stack.
