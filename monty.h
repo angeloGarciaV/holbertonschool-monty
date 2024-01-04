@@ -48,13 +48,6 @@ void pop(stack_t **stack, unsigned int line_number);
 void swap(stack_t **stack, unsigned int line_number);
 void nop(stack_t **stack, unsigned int line_number);
 void add(stack_t **stack, unsigned int line_number);
-<<<<<<< HEAD
-void get_func(char *s);
 
-=======
-void (*get_func(void))(stack_t **, unsigned int);
-void handle(char *file);
-void free_stack(stack_t *head);
-int _atoi(char *str, unsigned int line_number);
->>>>>>> e2eb007b278751c7da8d4e015a36dfc2a6fd362a
+
 #endif

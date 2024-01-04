@@ -10,7 +10,7 @@ void push(stack_t **stack, unsigned int line_number)
 {
 	stack_t *new_node;/*Declare a pointer to the new node*/
 
-	/*No stack or no argument, print an error message and exit*/
+	/* Check if stack or argument is missing */
 	if (!stack || !global_variable->argument)
 	{
 		fprintf(stderr, "L%d: usage: push integer\n", line_number);

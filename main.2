@@ -8,29 +8,33 @@
  */
 int main(int argc, char *argv[])
 {
+    FILE *bytecode_file;
+    char *line = NULL;
+    size_t len = 0;
+    stack_t *stack = NULL;
+    unsigned int line_number = 0;
+
     if (argc != 2)
     {
         fprintf(stderr, "Usage: %s file\n", argv[0]);
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
 
-    FILE *bytecode_file = fopen(argv[1], "r");
+    bytecode_file = fopen(argv[1], "r");
 
     if (!bytecode_file)
     {
         fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
-
-    char *line = NULL;
-    size_t len = 0;
-    unsigned int line_number = 0;
 
     while (getline(&line, &len, bytecode_file) != -1)
     {
         line_number++;
-	}
+        execute_opcode(&stack, line, line_number);
+    }
 
+    free_stack(&stack);
     free(line);
     fclose(bytecode_file);
 
