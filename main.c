@@ -1,4 +1,5 @@
 #include "monty.h"
+#include <string.h>
 
 global_t *global_variable = NULL; /* Initialize the global variable pointer to NULL */
 
@@ -97,3 +98,34 @@ int main(int argc, char **argv)
 	return (EXIT_SUCCESS);
 }
 
+/*Execute the appropriate opcode function based on the given opcode string*/
+void execute_opcode(stack_t **stack, char *opcode, unsigned int line_number)
+{
+
+	/*Define an array of opcodes and their corresponding functions*/
+	instruction_t instructions[] = {
+		{"push", push},
+		{"pall", pall},
+		{"pint", pint},
+		{"pop", pop},
+		{"swap", swap},
+		{"add", add},
+		{"nop", nop},
+		{NULL, NULL}
+	};
+
+	/*Iterate through the instructions array*/
+	for (int i = 0; instructions[i].opcode; i++)
+	{
+		/*If the opcode matches execute its function*/
+		if (strcmp(opcode, instructions[i].opcode) == 0)
+		{
+			instructions[i].f(stack, line_number);
+			return;
+		}
+	}
+
+	/*If the opcode is not found print an error message and exit*/
+	fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+	exit(EXIT_FAILURE);
+}
