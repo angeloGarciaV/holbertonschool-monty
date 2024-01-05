@@ -1,39 +1,99 @@
 #include "monty.h"
 
+global_t *global_variable = NULL; /* Initialize the global variable pointer to NULL */
+
+/* Function prototype for execute_opcode */
+void execute_opcode(stack_t **stack, char *opcode, unsigned int line_number);
+
 /**
- * main - Entry point of the Monty interpreter
- * @argc: Number of command-line arguments
- * @argv: Array of command-line arguments
- * Return: EXIT_SUCCESS on success, EXIT_FAILURE on failure
+ * free_stack - Frees a stack.
+ * @stack: Pointer to the head of the stack.
  */
-int main(int argc, char *argv[])
+void free_stack(stack_t *stack)
 {
-    if (argc != 2)
-    {
-        fprintf(stderr, "Usage: %s file\n", argv[0]);
-        return EXIT_FAILURE;
-    }
+	stack_t *temp;
 
-    FILE *bytecode_file = fopen(argv[1], "r");
+	while (stack)
+	{
+		temp = stack->next;
+		free(stack);
+		stack = temp;
+	}
+}
 
-    if (!bytecode_file)
-    {
-        fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-        return EXIT_FAILURE;
-    }
+/**
+ * main - Entry point of the Monty interpreter.
+ * @argc: Number of command-line arguments.
+ * @argv: Array of command-line arguments.
+ * Return: EXIT_SUCCESS on success, EXIT_FAILURE on failure.
+ */
+int main(int argc, char **argv)
+{
+	FILE *file;
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read;
+	unsigned int line_number = 0;
+	char *opcode;
+	stack_t *stack = NULL;
 
-    char *line = NULL;
-    size_t len = 0;
-    unsigned int line_number = 0;
-
-    while (getline(&line, &len, bytecode_file) != -1)
-    {
-        line_number++;
+	/* Check if the correct number of arguments is provided */
+	if (argc != 2)
+	{
+		fprintf(stderr, "USAGE: monty file\n");
+		exit(EXIT_FAILURE);
 	}
 
-    free(line);
-    fclose(bytecode_file);
+	/* Open the Monty bytecode file */
+	file = fopen(argv[1], "r");
+	if (!file)
+	{
+		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+		exit(EXIT_FAILURE);
+	}
 
-    return EXIT_SUCCESS;
+	/* Allocate memory for the global variable */
+	global_variable = malloc(sizeof(global_t));
+	if (!global_variable)
+	{
+		fprintf(stderr, "Error: malloc failed\n");
+		exit(EXIT_FAILURE);
+	}
+	global_variable->argument = NULL;
+
+	/* Read the file line by line */
+	while ((read = getline(&line, &len, file)) != -1)
+	{
+		line_number++;
+
+		/* Remove newline character if present */
+		if (line[read - 1] == '\n')
+			line[read - 1] = '\0';
+
+		/* Tokenize the line to get the opcode and its argument (if any) */
+		opcode = strtok(line, " \t"); /* Added '\t' to handle tab characters */
+		
+		/* Check if the line is not empty or starts with a comment */
+		if (opcode != NULL && opcode[0] != '#')
+		{
+			global_variable->argument = strtok(NULL, " \t");
+
+			/* Execute the opcode */
+			execute_opcode(&stack, opcode, line_number);
+		}
+
+		/* Free the line buffer and reset the length */
+		free(line);
+		line = NULL;
+		len = 0;
+	}
+
+	/* Close the file and free the memory */
+	fclose(file);
+	free(line);
+	free(global_variable);
+	free_stack(stack);
+
+	return (EXIT_SUCCESS);
 }
 

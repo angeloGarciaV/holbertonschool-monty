@@ -39,6 +39,22 @@ char *opcode;
 void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+/**
+ * struct global_s - Global variables for the Monty interpreter
+ * @file: File pointer for the Monty bytecode file
+ * @buffer: Buffer for reading lines from the file
+ * @stack: Pointer to the top of the stack
+ * @line_number: Current line number being processed
+ *
+ * Description: A structure to hold global variables
+ */
+
+typedef struct global_s
+{
+char *argument;
+} global_t;
+
+extern global_t *global_variable;
 
 /*Functions*/
 void push(stack_t **stack, unsigned int line_number);
